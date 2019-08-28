@@ -27,11 +27,11 @@ import { Component, Vue } from "vue-property-decorator";
 export default class LayoutHeader extends Vue {}
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .login-page {
   width: 100%;
   height: 100%;
-  background-image: url(../../../../../React学习/react-ts-project/src/assets/login-back.svg);
+  background-image: url(../../assets/login-back.svg);
   background-repeat: no-repeat;
   background-position: center 110px;
   background-size: 100%;

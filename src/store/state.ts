@@ -1,4 +1,6 @@
 const state: any = {
-    user: null
+  user: null,
+  routers: []
 };
-export default state
+
+export default state;

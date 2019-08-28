@@ -1,9 +1,12 @@
-import {MutationTree} from 'vuex'
-import {SET_USER, User} from './types'
+import { MutationTree } from 'vuex';
+
 const mutations: MutationTree<any> = {
-    [SET_USER](state: any, user: User): void{
-        state.user = user
-    }
+  SET_USER(state: any, user: any): void {
+    state.user = user;
+  },
+  SET_ROUTERS(state: any, routers: any): void {
+    state.routers = routers;
+  }
 };
 
-export default mutations
+export default mutations;
