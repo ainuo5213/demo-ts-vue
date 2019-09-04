@@ -27,7 +27,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class LayoutHeader extends Vue {}
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .login-page {
   width: 100%;
   height: 100%;

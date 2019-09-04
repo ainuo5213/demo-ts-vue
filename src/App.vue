@@ -1,27 +1,21 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+    <router-view/>
 </template>
-
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { State, Getter, Mutation, Action } from "vuex-class";
-@Component({
-  components: {}
-})
-export default class App extends Vue {
-  // 存储用户信息
-  @Action("setUser") setUser: any;
-  created() {
-    this.setUser(localStorage.tsToken);
-  }
-}
+    import {Vue, Component} from 'vue-property-decorator'
+    import {SET_USER} from './store/types'
+    import {Action} from 'vuex-class'
+    @Component({
+        components: {}
+    })
+    export default class App extends Vue {
+        @Action(SET_USER) setUser: any;
+        created () {
+            this.setUser(localStorage.getItem('tsToken'))
+        }
+    }
 </script>
 
-<style lang="scss">
-#app {
-  width: 100%;
-  height: 100%;
-}
+<style lang="less">
+
 </style>

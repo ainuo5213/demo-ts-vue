@@ -1,19 +1,19 @@
 {
-  "name": "vuets-app",
+  "name": "ele-ts-vue",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
-    "@types/echarts": "^4.1.9",
     "@types/jwt-decode": "^2.2.1",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
+    "@vue/babel-preset-jsx": "^1.1.0",
     "axios": "^0.19.0",
     "core-js": "^2.6.5",
-    "echarts": "^4.2.1",
-    "element-ui": "^2.10.1",
+    "element-ui": "^2.11.1",
     "jwt-decode": "^2.2.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
@@ -23,11 +23,11 @@
     "vuex-class": "^0.3.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.9.0",
-    "@vue/cli-plugin-typescript": "^3.9.0",
-    "@vue/cli-service": "^3.9.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.1.0",
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-typescript": "^3.11.0",
+    "@vue/cli-service": "^3.11.0",
+    "less": "^3.0.4",
+    "less-loader": "^5.0.0",
     "typescript": "^3.4.3",
     "vue-template-compiler": "^2.6.10"
   },
