@@ -1,173 +1,170 @@
 <template>
-  <div ref="mychart" class="chart" :style="{width:chartWidth,height:chartHeight}"></div>
+    <div ref="myCharts" class="chart" :style="{width: chartsWidth, height: chartsHeight}">
+    </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Provide, Prop } from "vue-property-decorator";
-import echarts from "echarts";
-@Component({
-  components: {}
-})
-export default class Charts extends Vue {
-  @Prop({ type: String, default: "line" }) readonly chartType!: string; // 图表类型 line/bar/pie
-  @Prop(Object) chartData!: string | null;
+    import {Component, Vue, Provide, Prop, Ref} from 'vue-property-decorator'
+    import echarts from 'echarts'
 
-  @Provide() chartWidth: string = "";
-  @Provide() chartHeight: string = "";
+    @Component({
+        components: {},
+    })
+    export default class ChartsData extends Vue {
+        @Provide('tabPosition') tabPosition: string = 'line';
+        @Prop({type: String, default: 'line'}) readonly chartsType !: string;
+        @Prop({type: Object}) readonly chartsData !: object | null;
+        @Provide('chartsWidth') chartsWidth: string = "";
+        @Provide('chartsHeight') chartsHeight: string = "";
+        @Provide('charts') charts: any;
 
-  created() {
-    this.generatorWidthAndHeight();
-  }
-
-  generatorWidthAndHeight() {
-    // 图表生成宽度和高度
-    this.chartWidth = `${document.body.offsetWidth * 0.8}px`;
-    this.chartHeight = `${document.body.offsetHeight * 0.6}px`;
-  }
-
-  mounted() {
-    this.drawChart();
-  }
-
-  drawChart() {
-    // 1 实例echarts对象
-    let chart = echarts.init((this as any).$refs.mychart as HTMLCanvasElement);
-    if (chart == undefined) {
-      console.log(`echarts init dom is failed`);
-      return;
-    }
-    switch (this.chartType) {
-      case "line":
-        chart.setOption((this as any).generatorLineOption());
-        break;
-      case "bar":
-        chart.setOption((this as any).generatorBarOption());
-        break;
-      case "pie":
-        chart.setOption((this as any).generatorPieOption());
-        break;
-      // default:
-      //   console.log(`chartType ${this.chartType} is invalid`);
-      //   break;
-    }
-  }
-
-  generatorLineOption() {
-    // 绘制折线图
-    return {
-      title: {
-        text: "近一周学习量",
-        subtext: "test",
-        x: "center"
-      },
-      xAxis: {
-        type: "category",
-        data: (this as any).chartData.xAxisData
-      },
-      yAxis: {
-        type: "value"
-      },
-      series: [
-        {
-          data: (this as any).chartData.yAxisData,
-          type: "line",
-          smooth: true
+        private generateWidthHeight() {
+            // 生成图表的宽高
+            this.chartsWidth = document.body.offsetWidth * 0.8 + 'px';
+            this.chartsHeight = document.body.offsetHeight * 0.6 + 'px';
         }
-      ],
-      tooltip: {
-        trigger: "axis",
-        axisPointer: {
-          type: "cross",
-          label: {
-            backgroundColor: "#6a7985"
-          }
-        }
-      }
-    };
-  }
 
-  generatorBarOption() {
-    return {
-      title: {
-        text: "近一周学习量",
-        subtext: "test",
-        x: "center"
-      },
-      xAxis: {
-        type: "category",
-        data: (this as any).chartData.xAxisData
-      },
-      yAxis: {
-        type: "value"
-      },
-      series: [
-        {
-          data: (this as any).chartData.yAxisData,
-          type: "bar",
-          barWidth: "20%"
+        created(): void {
+            this.generateWidthHeight()
         }
-      ],
-      color: ["#3398DB"],
-      tooltip: {
-        trigger: "axis",
-        axisPointer: {
-          // 坐标轴指示器，坐标轴触发有效
-          type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+
+        mounted() {
+            // 实例化eCharts对象
+            this.drawCharts()
         }
-      },
-      grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "5%"
-      }
-    };
-  }
 
-  generatorPieOption() {
-    // 处理数据
-    let pieData = [];
-    for (const index in (this as any).chartData.xAxisData) {
-      pieData.push({
-        value: (this as any).chartData.yAxisData[index],
-        name: (this as any).chartData.xAxisData[index]
-      });
-    }
+        destroyed () {
+            this.charts = null;
+        }
 
-    return {
-      title: {
-        text: "近一周学习量",
-        subtext: "test",
-        x: "center"
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
-      },
-      legend: {
-        orient: "vertical",
-        left: "left",
-        data: (this as any).chartData.xAxisData
-      },
-      series: [
-        {
-          name: "访问来源",
-          type: "pie",
-          radius: "55%",
-          center: ["50%", "60%"],
-          data: pieData,
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)"
+        private drawCharts() {
+            this.charts = echarts.init((this as any).$refs['myCharts'] as HTMLCanvasElement);
+            if (this.charts === undefined) {
+                console.log('eCharts dom is failed');
+                return;
             }
-          }
+            switch (this.chartsType) {
+                case "line":
+                    this.charts.setOption((this as any).generateLineOption());
+                    break;
+                case "bar":
+                    this.charts.setOption((this as any).generateBarOption());
+                    break;
+                case "pie":
+                    this.charts.setOption((this as any).generatePieOption());
+                    break;
+                default:
+                    this.charts.log('chartType is not valid');
+                    break;
+            }
         }
-      ]
-    };
-  }
-}
+
+        private generatePieOption(): object {
+            // 处理数据
+            let pieData = [];
+            for (const index in (this as any).chartsData.xAxisData) {
+                pieData.push({name: (this as any).chartsData.xAxisData[index], value: (this as any).chartsData.yAxisData[index] })
+            }
+            return {
+                title: {
+                    text: '近一周学习量',
+                    subtext: "test",
+                    x: "center"
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: (this as any).chartsData.xAxisData
+                },
+                series : [
+                    {
+                        name: 'weekday',
+                        type: 'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data: pieData,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+
+        private generateBarOption() {
+            return {
+                title: {
+                    text: '近一周学习量',
+                    subtext: "test",
+                    x: "center"
+                },
+                xAxis: {
+                    type: 'category',
+                    data: this.chartsData.xAxisData
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: this.chartsData.yAxisData,
+                    type: this.chartsType,
+                    barWidth: "20%"
+                }],
+                color: ['#33958d'],
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        type: "line",
+                        label: {
+                            backgroundColor: "#6a7985"
+                        }
+                    }
+                },
+            }
+        }
+
+        private generateLineOption(): object {
+            // 绘制折线图
+            return {
+                xAxis: {
+                    type: 'category',
+                    data: this.chartsData.xAxisData
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: this.chartsData.yAxisData,
+                    type: this.chartsType,
+                    smooth: true
+                }],
+                tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                        type: "cross",
+                        label: {
+                            backgroundColor: "#6a7985"
+                        }
+                    }
+                },
+                title: {
+                    text: '近一周学习量',
+                    subtext: "test",
+                    x: "center"
+                },
+            }
+        }
+    }
 </script>
 
-<style>
+<style scoped>
+
 </style>

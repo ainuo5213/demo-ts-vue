@@ -42,22 +42,16 @@
     })
     export default class UserInfo extends Vue {
         @Getter('user') private user!: User;
-        @Provide('userData') userData: UserData = {username: '', pwd: ''};
+        private userData: UserData = {username: '', pwd: ''};
         @Provide('loading') loading: boolean = false; // 是否发起网络请求
 
         submitForm(): void {
             this.userData.username = this.user.username;
-            console.log(this.userData);
             this.loading = true;
             (this as any).axios.post('/api/users/changePwd', this.userData).then((res: AxiosResponse) => {
-                console.log(res.data);
                 this.$message.success(res.data.msg);
                 this.loading = true;
             }).catch(() => this.loading = false)
-        }
-
-        created() {
-            console.log(this.user)
         }
 
     }

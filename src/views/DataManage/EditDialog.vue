@@ -104,9 +104,8 @@
         };
         @Provide('loading') loading: boolean = false;
 
-        submitForm(ruleForm: string) {
-
-            let form = <any>this.$refs[ruleForm];
+        submitForm(formName: string): void {
+            let form = <any>this.$refs[formName];
             form.validate((valid: boolean) => {
                 if (valid) {
                     this.loading = true;
